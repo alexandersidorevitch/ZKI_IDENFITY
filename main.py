@@ -32,7 +32,8 @@ class Main(Load, Check, Encode):
                     print('Вы еще не зарегистрированны')
                     continue
                 else:
-                    if self.encode(password) == el.get('password', None):
+                    # password, salt = el.get('password', None).split(':')
+                    if self.check_password(el.get('password', None), password):
                         new_password = self.random_password()
                         print('Поздравляю вы зашли!')
                         print(f'Ваш новый пароль: {new_password}')
@@ -48,7 +49,7 @@ class Main(Load, Check, Encode):
                         'login': self.is_suitable_raise(input('Введите логин: ')),
                         'password': self.encode(self.is_suitable_raise(input('Введите пароль: '))),
                         'FIO': self.is_suitable_raise(input('Введите ФИО: ')),
-                        'main_word': self.is_suitable_raise(input('Введите ключевое слово: ')),
+                        'main_word': self.encode(self.is_suitable_raise(input('Введите ключевое слово: '))),
                     }
                 except ValueError:
                     print('Нельзя вводить знаки припенания и пробел в начале строки')
@@ -71,7 +72,7 @@ class Main(Load, Check, Encode):
                     continue
                 self_el = self.return_el_with_login(all_data, login)
                 if self_el is not None:
-                    if self_el.get('main_word', None) == main_word:
+                    if self.check_password(self_el.get('main_word', None), main_word):
                         new_password = self.random_password()
                         print('Поздравляю вы зашли!')
                         print(f'Ваш новый пароль: {new_password}')
